@@ -102,9 +102,9 @@ app.use((req, resp, next) => {
   next();
 });
 
-// app.get("/", (req, resp) => {
-//   resp.send("Root is working");
-// });
+app.get("/", (req, resp) => {
+  resp.send("Root is working");
+});
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
