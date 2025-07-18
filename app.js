@@ -10,19 +10,8 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
-
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB Atlas!");
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-  });
 
 // Authentication Setup
 const passport = require("passport"); //[pbkfd2 hashing algo]
@@ -40,6 +29,8 @@ const listingRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
+const dbUrl = process.env.ATLASDB_URL;
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
@@ -56,16 +47,30 @@ main()
   });
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/Airbnb");
+  await mongoose.connect(dbUrl); //"mongodb://127.0.0.1:27017/Airbnb"
 }
 
 app.listen(8080, () => {
   console.log("Servver is live");
 });
 
+// Setting up session store
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 3600, // after how much time session should update
+});
+
+store.on("error", () => {
+  console.log("ERROR in MONGO SESSION STORE", err);
+});
+
 // 1. Setting up Session middleware
 const sessionOptions = {
-  secret: "mysupersecretcode",
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
