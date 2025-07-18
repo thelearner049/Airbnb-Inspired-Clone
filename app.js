@@ -102,13 +102,13 @@ app.use((req, resp, next) => {
   next();
 });
 
-app.get("/", (req, resp) => {
-  resp.send("Root is working");
-});
-
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
+
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
 
 app.use((err, req, resp, next) => {
   let { status = 500, message = "Something went wrong" } = err;
