@@ -26,8 +26,9 @@ module.exports.showListing = async (req, resp) => {
   resp.render("listings/show.ejs", { listing });
 };
 
-module.exports.createListing = async (req, resp, next) => {
+module.exports.createListing = async (req, resp) => {
   const location = req.body.listing.location; // e.g., "New Delhi, India"
+  console.log(location);
   const nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
     location
   )}`;
@@ -80,22 +81,9 @@ module.exports.createListing = async (req, resp, next) => {
   req.flash("success", "New Listing Created!");
   resp.redirect("/listings");
 };
-// module.exports.edit = async (req, resp) => {
-//   let { id } = req.params;
-//   const listing = await Listing.findById(id);
-//   if (!listing) {
-//     req.flash("error", " This Listing doesn't Exsist!");
-//     return resp.redirect("/listings");
-//   }
-
-//   let originalImage = listing.image.url;
-//   let originalImageUrl = originalImage.replace("/upload", "/upload/w_250");
-//   resp.render("listings/edit.ejs", { listing, originalImageUrl });
-// };
 
 module.exports.edit = async (req, resp) => {
   let { id } = req.params;
-  console.log("Editing listing with ID:", id);
 
   const listing = await Listing.findById(id);
   console.log("Found listing:", listing);
