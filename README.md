@@ -6,13 +6,13 @@ A full-stack web application inspired by Airbnb, built using Express, MongoDB, a
 
 ## 🌐 Live Demo
 
-[Visit Site](https://your-render-url.onrender.com)
+[Visit Site](https://airbnb-inspired-clone.onrender.com/)
 
 ---
 
 ## 📷 Preview
 
-![Website Preview](public/images/preview-img.png)
+![Website Preview](public/image/preview-img.png)
 
 ---
 
